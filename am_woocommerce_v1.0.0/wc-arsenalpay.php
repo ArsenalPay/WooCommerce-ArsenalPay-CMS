@@ -1,25 +1,30 @@
 <?php
 /*
 Plugin Name: ArsenalPay
-Author: ArsenalPay
-Author URI: https://arsenalpay.ru
+Plugin URI: https://arsenalpay.ru/site/cmsplugins
 Description: Extends WooCommerce with ArsenalPay gateway.
 Version: 1.0.0
- 
-	License: GNU General Public License v3.0
-	License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Author: ArsenalPay
+Author URI: https://arsenalpay.ru
+License: GNU General Public License v3.0
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 */
+
+//Tips for plugin developer:
+//Don't use any cyrillic symbols in comments to display this code properly in wordpress plugin-editor after clicking on /change the plugin/.
+
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-add_action('plugins_loaded', 'woocommerce_gateway_arsenalpay_init', 0);
+add_action('plugins_loaded', 'wc_arsenalpay_gateway_init', 0);
  
-function woocommerce_gateway_arsenalpay_init() 
+function wc_arsenalpay_gateway_init() 
 {
     if ( !class_exists( 'WC_Payment_Gateway' ) ) return;
-
+	if(class_exists('WC_Gateway_Arsenalpay'))
+		return;
     /**
      * Localisation
      */
-    load_plugin_textdomain('wc-gateway-arsenalpay', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
+   // load_plugin_textdomain('wc-gateway-arsenalpay', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
 
     /**
      * Gateway class
@@ -30,7 +35,7 @@ function woocommerce_gateway_arsenalpay_init()
         {
             global $woocommerce;
             $this->id 	          = 'arsenalpay';
-            $this->icon = apply_filters( 'woocommerce_arsenalpay_icon', '' . plugin_dir_url(__FILE__) . 'arsenalpay.png' );
+            $this->icon = apply_filters( 'woocommerce_arsenalpay_icon', '' . plugin_dir_url(__FILE__) . 'wc-arsenalpay.png' );
             $this->method_title       = __( 'ArsenalPay', 'woocommerce' );
             $this->method_description = __( 'Allows payments with ArsenalPay gateway', 'woocommerce' );
             $this->has_fields         = false;
@@ -147,7 +152,7 @@ function woocommerce_gateway_arsenalpay_init()
                     'type'        => 'text',
                     'description' => __( 'Callback URL of payment, required.', 'woocommerce' ),
                     'desc_tip'    => true,
-                    'default'     => WC()->api_request_url( 'WC_Gateway_ArsenalPay' ),
+                    'default'     => WC()->api_request_url( 'WC_Gateway_ArsenalPay' ) . '&arsenalpay=callback',
                     ),
                 'arsenalpay_check_url' => array(
                     'title'       => __( 'Check URL.', 'woocommerce' ),
@@ -158,7 +163,7 @@ function woocommerce_gateway_arsenalpay_init()
                 'arsenalpay_src' => array(
                     'title'       => __( 'Src parameter', 'woocommerce' ),
                     'type'        => 'select',
-                    'description' => __( 'Payment type. Possible options: «mk» - payment from mobile phone (mobile commerce), «card» - payment by bank card (internet-acquiring), optional.', 'woocommerce' ),
+                    'description' => __( 'Payment type. Possible options: mk - payment from mobile phone (mobile commerce), card - payment by bank card (internet-acquiring), optional.', 'woocommerce' ),
                     'desc_tip'    => true,
                     'default'     => 'mk',
                     'options'     => array(
@@ -199,6 +204,15 @@ function woocommerce_gateway_arsenalpay_init()
 
         public function admin_options() 
         {
+            echo "
+                <br>
+                <h3>Redirect URLs</h3>
+                    <ul>
+                    <li>Success redirect: <code>".get_bloginfo("url")."/?wc-api=wc_gateway_arsenalpay&arsenalpay=success</code></li>
+                    <li>Failure redirect: <code>".get_bloginfo("url")."/?wc-api=wc_gateway_arsenalpay&arsenalpay=fail</code></li>
+                    </ul>
+                ";
+        
             if ( $this->is_valid_for_use() ) 
             {	
                 ?>
@@ -239,145 +253,162 @@ function woocommerce_gateway_arsenalpay_init()
         {   
             global $woocommerce;
             @ob_clean();
-            
             $ars_callback = stripslashes_deep($_POST);
-            $wc_order = wc_get_order( $ars_callback['ACCOUNT'] );
-            $REMOTE_ADDR = $_SERVER["REMOTE_ADDR"];
-          
-            if ( 'yes' == $this->debug ) 
+            if (isset($_GET['arsenalpay']) AND $_GET['arsenalpay'] == 'callback') 
             {
-                $this->log->add( 'arsenalpay', 'Remote IP for order ' . $wc_order->get_order_number() . ": ".$REMOTE_ADDR );
-            }
-            $IP_ALLOW = $this->arsenalpay_ip;
-            if( strlen( $IP_ALLOW ) > 0 && $IP_ALLOW != $REMOTE_ADDR ) 
-            {
+                $wc_order = wc_get_order( $ars_callback['ACCOUNT'] );
+                $REMOTE_ADDR = $_SERVER["REMOTE_ADDR"];
+
                 if ( 'yes' == $this->debug ) 
                 {
-                    $this->log->add( 'arsenalpay', 'IP %s is not allowed.', $REMOTE_ADDR );
+                    $this->log->add( 'arsenalpay', 'Remote IP for order ' . $wc_order->get_order_number() . ": ".$REMOTE_ADDR );
                 }
-                $this->exitf( 'ERR_IP' );
-
-            }
-             
-           if( !$wc_order || empty($wc_order) )
-            {
-                if( $ars_callback['FUNCTION']=="check" )
+                $IP_ALLOW = $this->arsenalpay_ip;
+                if( strlen( $IP_ALLOW ) > 0 && $IP_ALLOW != $REMOTE_ADDR ) 
                 {
                     if ( 'yes' == $this->debug ) 
                     {
-                        $this->log->add( 'arsenalpay', " Order %s doesn't exist. ", $ars_callback['ACCOUNT']);
+                        $this->log->add( 'arsenalpay', 'IP %s is not allowed.', $REMOTE_ADDR );
                     }
-                    $this->exitf( 'NO' );
+                    $this->exitf( 'ERR_IP' );
+
                 }
-                $this->exitf( "ERR_ACCOUNT" );
-            }
-            if ( $wc_order->has_status( 'completed' ) ) 
-            {
-                if ( 'yes' == $this->debug )
+
+               if( !$wc_order || empty($wc_order) )
                 {
-                        $this->log->add( 'arsenalpay', 'Aborting, Order #' . $order->id . ' is already complete.' );
+                    if( $ars_callback['FUNCTION']=="check" )
+                    {
+                        if ( 'yes' == $this->debug ) 
+                        {
+                            $this->log->add( 'arsenalpay', " Order %s doesn't exist. ", $ars_callback['ACCOUNT']);
+                        }
+                        $this->exitf( 'NO' );
+                    }
+                    $this->exitf( "ERR_ACCOUNT" );
                 }
-                exit;
-            }
-                
-            $keyArray = array
-            (
-                'ID',           /* Идентификатор ТСП/ merchant identifier */
-                'FUNCTION',     /* Тип запроса/ type of request to which the response is received*/
-                'RRN',          /* Идентификатор транзакции/ transaction identifier */
-                'PAYER',        /* Идентификатор плательщика/ payer(customer) identifier */
-                'AMOUNT',       /* Сумма платежа/ payment amount */
-                'ACCOUNT',      /* Номер получателя платежа (номер заказа, номер ЛС) на стороне ТСП/ order number */
-                'STATUS',       /* Статус платежа - check - запрос на проверку номера получателя : payment - запрос на передачу статуса платежа
-                /* Payment status. When 'check' - response for the order number checking, when 'payment' - response for status change.*/
-                'DATETIME',     /* Дата и время в формате ISO-8601 (YYYY-MM-DDThh:mm:ss±hh:mm), УРЛ-кодированное */
-                /* Date and time in ISO-8601 format, urlencoded.*/
-                'SIGN',         /* Подпись запроса/ response sign.
-                 //* = md5(md5(ID).md(FUNCTION).md5(RRN).md5(PAYER).md5(AMOUNT).md5(ACCOUNT).md(STATUS).md5(PASSWORD)) */       
-            ); 
-            /**
-            * Checking the absence of each parameter in the post request.
-            * Проверка на присутствие каждого из параметров и их значений в передаваемом запросе. 
-            */   
-            foreach( $keyArray as $key ) 
-            {
-                if( empty( $ars_callback[$key] ) || !array_key_exists( $key, $ars_callback ) )
+                if ( $wc_order->has_status( 'completed' ) ) 
                 {
-                    $this->exitf( 'ERR_'.$key );
+                    if ( 'yes' == $this->debug )
+                    {
+                            $this->log->add( 'arsenalpay', 'Aborting, Order #' . $order->id . ' is already complete.' );
+                    }
+                    exit;
+                }
+
+                $keyArray = array
+                (
+                    'ID',           /* Merchant identifier */
+                    'FUNCTION',     /* Type of request to which the response is received*/
+                    'RRN',          /* Transaction identifier */
+                    'PAYER',        /* Payer(customer) identifier */
+                    'AMOUNT',       /* Payment amount */
+                    'ACCOUNT',      /* Order number */
+                    'STATUS',       /* When /check/ - response for the order number checking, when 
+									// payment/ - response for status change.*/
+                    'DATETIME',     /* Date and time in ISO-8601 format, urlencoded.*/
+                    'SIGN',         /* Response sign  = md5(md5(ID).md(FUNCTION).md5(RRN).md5(PAYER).md5(AMOUNT).
+									// md5(ACCOUNT).md(STATUS).md5(PASSWORD)) */       
+                ); 
+				
+                /**
+                * Checking the absence of each parameter in the post request.
+                */   
+                foreach( $keyArray as $key ) 
+                {
+                    if( empty( $ars_callback[$key] ) || !array_key_exists( $key, $ars_callback ) )
+                    {
+                        $this->exitf( 'ERR_'.$key );
+                    }
+                    else 
+                    {
+                        if ( 'yes' == $this->debug ) 
+                        {
+                            $this->log->add( 'arsenalpay', " $key=$ars_callback[$key]" );
+                        }   
+                    }
+                }
+
+
+                $KEY = $this->arsenalpay_key;
+
+                       
+                // Validate Amount
+                if ($wc_order->get_total() != $ars_callback['AMOUNT'] )
+                {
+                    if ( 'yes' == $this->debug ) 
+                    {
+                        $this->log->add( 'arsenalpay', 'Payment error: Amounts do not match (amount ' . $ars_callback['AMOUNT'] . ')' );
+                    }
+                    // Put this order on-hold for manual checking
+                    $order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $ars_callback['AMOUNT'] ) );
+                    $this->exitf( 'ERR_AMOUNT' );
+                }
+
+
+                //======================================
+                /**
+                * Checking validness of the request sign.
+                */
+                if( !( $this->_checkSign( $ars_callback, $KEY) ) ) 
+                {
+				 //============== For testing, delete after testing =============================
+                  $S=md5(md5($ars_callback['ID']).
+                            md5($ars_callback['FUNCTION']).md5($ars_callback['RRN']).
+                          md5($ars_callback['PAYER']).md5($ars_callback['AMOUNT']).md5($ars_callback['ACCOUNT']).
+                           md5($ars_callback['STATUS']).md5($KEY) );
+                    echo $S.'</br>';
+                    //======================================
+                    $this->exitf( 'ERR_INVALID_SIGN' );
+
+                }
+                if( $ars_callback['FUNCTION'] == "check" )
+                {
+                    // Check account
+                    /*
+                            Here is account check procedure
+                            Result:
+                            YES - account exists
+                            NO - account not exists
+                    */
+
+                    $this->exitf( 'YES' );
+                } 
+                elseif( ( $ars_callback['FUNCTION']=="payment" ) && ( $ars_callback['STATUS'] === "payment" ) )
+                {
+                    // Payment callback
+                    /*
+                            Here is callback payment saving procedure
+                            Result:
+                            OK - success saving
+                            ERR - error saving*/
+                    $wc_order->add_order_note( __( 'Payment completed', 'woocommerce' ) );
+                    $wc_order->payment_complete();
+                    $woocommerce->cart->empty_cart();
+                    $this->exitf('OK');  
                 }
                 else 
-                {
-                    if ( 'yes' == $this->debug ) 
-                    {
-                        $this->log->add( 'arsenalpay', " $key=$ars_callback[$key]" );
-                    }   
+                {   
+                    $wc_order->update_status( 'failed', sprintf( __( 'Payment failed via callback.', 'woocommerce' ) ) );
+                    $this->exitf('ERR');
                 }
             }
-            
-            
-            $KEY = $this->arsenalpay_key;
-            
-                    //============== For testing, delete after testing =============================
-            //  $S=md5(md5($ars_callback['ID']).
-            //            md5($ars_callback['FUNCTION']).md5($ars_callback['RRN']).
-            //          md5($ars_callback['PAYER']).md5($ars_callback['AMOUNT']).md5($ars_callback['ACCOUNT']).
-            //           md5($ars_callback['STATUS']).md5($KEY) );
-            //    echo $S.'</br>';
-                //======================================
-            // Validate Amount
-            if ($wc_order->get_total() != $ars_callback['AMOUNT'] )
-            {
-                if ( 'yes' == $this->debug ) 
-                {
-                    $this->log->add( 'arsenalpay', 'Payment error: Amounts do not match (amount ' . $ars_callback['AMOUNT'] . ')' );
-                }
-                // Put this order on-hold for manual checking
-		$order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $ars_callback['AMOUNT'] ) );
-                $this->exitf( 'ERR_AMOUNT' );
-            }
-                 
-     
-            //======================================
-            /**
-            * Checking validness of the request sign.
-            */
-            if( !( $this->_checkSign( $ars_callback, $KEY) ) ) 
-            {
-                $this->exitf( 'ERR_INVALID_SIGN' );
-
-            }
-            if( $ars_callback['FUNCTION'] == "check" )
-            {
-                // Check account
-                /*
-                        Here is account check procedure
-                        Result:
-                        YES - account exists
-                        NO - account not exists
-                */
-             
-                $this->exitf( 'YES' );
-            } 
-            elseif( ( $ars_callback['FUNCTION']=="payment" ) && ( $ars_callback['STATUS'] === "payment" ) )
-            {
-                // Payment callback
-                /*
-                        Here is callback payment saving procedure
-                        Result:
-                        OK - success saving
-                        ERR - error saving*/
-                $wc_order->add_order_note( __( 'Payment completed', 'woocommerce' ) );
-                $wc_order->payment_complete();
-                $woocommerce->cart->empty_cart();
+            else if (isset($_GET['arsenalpay']) AND $_GET['arsenalpay'] == 'success') 
+            {  
+                $wc_order = wc_get_order($ars_callback['ACCOUNT']);
+                $wc_order->add_order_note( __( 'Payer redirected to the success page.', 'woocommerce' ) );
                 wp_redirect( $this->get_return_url( $wc_order ) );
-                $this->exitf('OK');  
+                exit;
+                
             }
-            else 
+            else if (isset($_GET['arsenalpay']) AND $_GET['arsenalpay'] == 'fail')
             {   
-                $wc_order->update_status( 'failed', sprintf( __( 'Payment failed via callback.', 'woocommerce' ) ) );
+                $wc_order = wc_get_order($ars_callback['ACCOUNT']);
+                var_dump($wc_order);
+                $wc_order->update_status( 'failed', sprintf( __( 'Payer cancelled the payment or error occured. Redirected to fail page.', 'woocommerce' ) ) );
                 wp_redirect($wc_order->get_cancel_order_url());
-                $this->exitf('ERR');
+		exit; 
             }
+            
         } 
             
         private function _checkSign( $ars_callback, $pass)
@@ -403,10 +434,10 @@ function woocommerce_gateway_arsenalpay_init()
     /**
     * Add the ArsenalPay Gateway to WooCommerce
     **/
-    function woocommerce_add_gateway_arsenalpay($methods) {
+    function add_arsenalpay_gateway($methods) {
             $methods[] = 'WC_Gateway_ArsenalPay';
             return $methods;
     }
 
-    add_filter('woocommerce_payment_gateways', 'woocommerce_add_gateway_arsenalpay' );
+    add_filter('woocommerce_payment_gateways', 'add_arsenalpay_gateway' );
 } 
