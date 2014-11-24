@@ -1,0 +1,231 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wc-arsenalpay\n"
+"POT-Creation-Date: 2014-11-25 08:52+1100\n"
+"PO-Revision-Date: 2014-11-25 09:03+1100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: wc-arsenalpay.php:41 wc-arsenalpay.php:111 wc-arsenalpay.php:214
+msgid "ArsenalPay"
+msgstr ""
+
+#: wc-arsenalpay.php:42
+msgid "Allows payments with ArsenalPay gateway"
+msgstr "Позволяет принимать платежи с помощью платежной системы ArsenalPay"
+
+#: wc-arsenalpay.php:102
+msgid "Enable/Disable"
+msgstr ""
+
+#: wc-arsenalpay.php:104
+msgid "Enable ArsenalPay"
+msgstr "Включить ArsenalPay"
+
+#: wc-arsenalpay.php:108
+msgid "Title"
+msgstr ""
+
+#: wc-arsenalpay.php:110
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: wc-arsenalpay.php:115
+msgid "Description"
+msgstr ""
+
+#: wc-arsenalpay.php:117
+msgid "Pay with ArsenalPay."
+msgstr "Оплатите с ArsenalPay."
+
+#: wc-arsenalpay.php:118
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: wc-arsenalpay.php:122
+msgid "Unique token"
+msgstr "Уникальный токен"
+
+#: wc-arsenalpay.php:124
+msgid ""
+"Assigned to merchant for the access to ArsenalPay payment frame. Required."
+msgstr ""
+"Присваивается предприятию для доступа к платежному фрейму. Обязательный."
+
+#: wc-arsenalpay.php:128
+msgid "Other number or code required for making payments"
+msgstr "Дополнительный номер или код, необходимый для оплаты"
+
+#: wc-arsenalpay.php:130
+msgid ""
+"Not accessible for editing to the user and not displayed if it is set. "
+"Optional."
+msgstr ""
+"Недоступен для редактирования плательщику и не отображается в случае, если "
+"задан. Необязательный."
+
+#: wc-arsenalpay.php:134
+msgid "Frame URL"
+msgstr "URL-адрес фрейма"
+
+#: wc-arsenalpay.php:136
+msgid "URL-address of ArsenalPay payment frame. Required."
+msgstr "URL-адрес платежного фрейма ArsenalPay. Обязательный."
+
+#: wc-arsenalpay.php:141
+msgid "src parameter"
+msgstr "Параметр src"
+
+#: wc-arsenalpay.php:143
+msgid ""
+"Payment type. Possible options: mk - payment from mobile phone (mobile "
+"commerce), card - payment by bank card (internet-acquiring). Optional."
+msgstr ""
+"Тип оплаты.  Возможные варианты: mk - оплата с мобильного телефона "
+"(мобильная коммерция). card - оплата с пластиковой карты (интернет "
+"эквайринг)."
+
+#: wc-arsenalpay.php:147
+msgid "mk"
+msgstr ""
+
+#: wc-arsenalpay.php:148
+msgid "card"
+msgstr ""
+
+#: wc-arsenalpay.php:152
+msgid "css option"
+msgstr "Параметр css"
+
+#: wc-arsenalpay.php:154
+msgid "URL of CSS file if exists. Optional."
+msgstr "Aдрес (URL) CSS файла.  Необязательный."
+
+#: wc-arsenalpay.php:158
+msgid "Sign key"
+msgstr "Ключ"
+
+#: wc-arsenalpay.php:160
+msgid ""
+"With this key you check a validity of sign that comes with callback payment "
+"data. Required."
+msgstr ""
+"Для проверки подписи данных, которые приходят с обратным запросом . "
+"Обязательный."
+
+#: wc-arsenalpay.php:164
+msgid "Allowed IP-address"
+msgstr "Разрешенный IP-адрес"
+
+#: wc-arsenalpay.php:166
+msgid ""
+"It can be allowed to receive ArsenalPay payment confirmation callback "
+"requests only from the ip address pointed out here. Optional."
+msgstr ""
+"Только с которого будут разрешены обратные запросы о подтверждении платежей  "
+"от ArsenalPay. Необязательный."
+
+#: wc-arsenalpay.php:170
+msgid "Check URL."
+msgstr "URL для проверки."
+
+#: wc-arsenalpay.php:172
+msgid "URL to check the existance of transaction. Optional"
+msgstr ""
+"Для проверки существования номера заказа перед подтверждением платежа. "
+"Необязательный."
+
+#: wc-arsenalpay.php:176
+msgid "Frame display mode"
+msgstr "Режим отображения фрейма"
+
+#: wc-arsenalpay.php:178
+msgid ""
+"1 - to display inside a frame, otherwise on fullscreen payment frame page. "
+"Optional."
+msgstr ""
+"1 - отображать фрейм внутри страницы сайта, иначе - на странице фрейма. "
+"Необязательный."
+
+#: wc-arsenalpay.php:183
+msgid "Frame parameters"
+msgstr "Дополнительные параметры фрейма"
+
+#: wc-arsenalpay.php:185
+msgid "Parameters of iFrame. Optional."
+msgstr "Параметры iframe. Необязательный."
+
+#: wc-arsenalpay.php:190
+msgid "Debug Log"
+msgstr ""
+
+#: wc-arsenalpay.php:192
+msgid "Enable logging"
+msgstr ""
+
+#: wc-arsenalpay.php:194
+msgid "Log ArsenalPay events, such as callback requests"
+msgstr "Записывать логи событий, такие как обратные запросы"
+
+#: wc-arsenalpay.php:205
+msgid "Success redirect"
+msgstr "Перенаправление при успешной оплате"
+
+#: wc-arsenalpay.php:206
+msgid "Failure redirect"
+msgstr "Перенаправление при неудавшейся оплате"
+
+#: wc-arsenalpay.php:207
+msgid "Callback URL"
+msgstr "URL для обратного запроса"
+
+#: wc-arsenalpay.php:222
+msgid "Gateway Disabled"
+msgstr ""
+
+#: wc-arsenalpay.php:222
+msgid "ArsenalPay does not support your store currency."
+msgstr "ArsenalPay не поддерживает валюту Вашего магазина."
+
+#: wc-arsenalpay.php:348
+#, php-format
+msgid "Validation error: ArsenalPay amounts do not match (amount %s)."
+msgstr ""
+"Ошибка подтверждения: сумма с запросом ArsenalPay не совпадает (сумма %s)."
+
+#: wc-arsenalpay.php:371
+msgid "Order number has been checked."
+msgstr "Номер заказа проверен."
+
+#: wc-arsenalpay.php:372
+msgid "Waiting for payment confirmation after checking."
+msgstr "Ожидание подтверждения платежа после проверки."
+
+#: wc-arsenalpay.php:383
+msgid "Payment completed"
+msgstr "Платеж завершен"
+
+#: wc-arsenalpay.php:390
+msgid "Payment failed via callback."
+msgstr "Платеж не подтвержился при получении обратного запроса."
+
+#: wc-arsenalpay.php:397
+msgid "Payer redirected to the success page."
+msgstr "Покупатель перенаправлен на страницу с результатом успешной оплаты."
+
+#: wc-arsenalpay.php:406
+msgid "Payer cancelled the payment or error occured. Redirected to fail page."
+msgstr ""
+"Покупатель отменил платеж либо возникла ошибка.  Перенаправлен на страницу  "
+"неудавшейся оплаты."
