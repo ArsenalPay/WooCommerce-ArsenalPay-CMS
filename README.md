@@ -20,7 +20,7 @@ Basic feature list:
  * Supports two languages (Russian, English).
  
 ## How to install
-1. Download zip archive from `htpp://github/ ` .
+1. Download zip archive from `https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS/archive/master.zip` .
 2. Login to the WordPress admin section. 
 3. Go to **Plugins>Add New>Upload Plugin** and choose the right location of downloaded plugin archive.
 4. Click **Install Now** and then **Activate Plugin**.
