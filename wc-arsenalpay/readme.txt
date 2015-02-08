@@ -2,13 +2,14 @@
 Contributors: ArsenalPay
 Donate link: https://arsenalpay.ru/support.html
 Tags: payment gateway, woocommerce, payment system, e-commerce
-Requires WordPress at least: 4.0
+Requires at least: 4.0
 Requires WooCommerce at least: 2.2.4
 Tested up to: 4.0.1
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Accept international bank card payments (VISA/Masercard/Maestro) and mobile payments (MTS/Beeline/TELE2/Rostelecom) with ArsenalPay payment gateway on your website.
+Accept major card(VISA/Masercard/Maestro) and mobile (MTS/Beeline/TELE2/Rostelecom) payments with ArsenalPay on your website.
 
 == Description ==
 
