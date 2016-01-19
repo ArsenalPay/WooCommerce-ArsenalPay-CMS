@@ -1,16 +1,13 @@
 # ArsenalPay Plugin for Woocommerce of Wordpress CMS
 
-[Arsenal Media LLC](http://www.arsenalmedia.ru/index.php/en)
+*Arsenal Media LLC*
 
 [Arsenal Pay processing server]( https://arsenalpay.ru/)
-
-
 
 ## Version
 1.0.0
 
 *Has been tested on WordPress 4.0/4.0.1 and WooCommerce 2.2.4/2.2.8*
-
 
 Basic feature list:
 
@@ -20,7 +17,7 @@ Basic feature list:
  * Supports two languages (Russian, English).
  
 ## How to install
-1. Download zip archive from `https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS/archive/master.zip` .
+1. Download zip archive from `https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS/` .
 2. Login to the WordPress admin section. 
 3. Go to **Plugins>Add New>Upload Plugin** and choose the right location of downloaded plugin archive.
 4. Click **Install Now** and then **Activate Plugin**.
@@ -66,10 +63,8 @@ After successful installation and proper settings new choice of payment method w
 * Платежная система ArsenalPay позволяет совершать оплату с различных источников списания средств: мобильных номеров (МТС/Мегафон/Билайн/TELE2), пластиковых карт (VISA/MasterCard/Maestro). Перечень доступных источников средств постоянно пополняется. Следите за обновлениями.
 * Плагин поддерживает русский и английский языки.
 
-За более подробной информацией о платежной системе ArsenalPay обращайтесь по адресу [arsenalpay.ru](http://arsenalpay.ru)
-
 ### УСТАНОВКА
-1. Загрузите zip архив плагина из репозитория `http://github/` ;
+1. Загрузите zip архив плагина из репозитория `https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS/` ;
 2. Зайдите в администрирование WordPress;
 3. Пройдите в **Плагины>Добавить новый>Загрузить плагин** и выберите файл с загруженным архивом;
 4. Нажмите на **Установить** и затем **Активировать плагин**.
@@ -107,6 +102,43 @@ After successful installation and proper settings new choice of payment method w
 3. В разделе "Платежные системы" выбрать платежную систему ArsenalPay.
 4. Перейти на страницу подтверждения введенных данных и ввода источника списания средств (мобильный номер, пластиковая карта и т.д.).
 5. После ввода данных об источнике платежа, в зависимости от его типа, либо придет СМС о подтверждении платежа, либо покупатель будет перенаправлен на страницу с результатом платежа.
+
+------------------
+### ОПИСАНИЕ РЕШЕНИЯ
+ArsenalPay – удобный и надежный платежный сервис для бизнеса любого размера. 
+
+Используя платежный модуль от ArsenalPay, вы сможете принимать онлайн-платежи от клиентов по всему миру с помощью: 
+пластиковых карт международных платёжных систем Visa и MasterCard, эмитированных в любом банке
+баланса мобильного телефона операторов МТС, Мегафон, Билайн, Ростелеком и ТЕЛЕ2
+различных электронных кошельков 
+
+### Преимущества сервиса: 
+ - Самые низкие тарифы
+ - Бесплатное подключение и обслуживание
+ - Легкая интеграция
+ - Агентская схема: ежемесячные выплаты разработчикам
+ - Вывод средств на расчетный счет без комиссии
+ - Сервис смс оповещений
+ - Персональный личный кабинет
+ - Круглосуточная сервисная поддержка клиентов 
+
+А ещё мы можем взять на техническую поддержку ваш сайт и создать для вас мобильные приложения для Android и iOS. 
+
+ArsenalPay – увеличить прибыль просто! 
+Мы работаем 7 дней в неделю и 24 часа в сутки. А вместе с нами множество российских и зарубежных компаний. 
+
+### Как подключиться: 
+1. Вы скачали модуль и установили его у себя на сайте;
+2. Отправьте нам письмом ссылку на Ваш сайт на pay@arsenalpay.ru;
+3. Мы Вам вышлем коммерческие условия и технические настройки;
+4. После Вашего согласия мы отправим Вам проект договора на рассмотрение.
+5. Подписываем договор и приступаем к работе.
+
+Всегда с радостью ждем ваших писем с предложениями. 
+
+pay@arsenalpay.ru 
+
+[arsenalpay.ru](https://arsenalpay.ru)
  
 
 
