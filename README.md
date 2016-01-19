@@ -2,7 +2,7 @@
 
 *Arsenal Media LLC*
 
-[Arsenal Pay processing server]( https://arsenalpay.ru/)
+[Arsenal Pay processing center]( https://arsenalpay.ru/)
 
 ## Version
 1.0.0
