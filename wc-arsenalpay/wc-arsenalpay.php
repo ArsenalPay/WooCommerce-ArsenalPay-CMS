@@ -3,7 +3,7 @@
 Plugin Name: ArsenalPay
 Plugin URI: https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS
 Description: Extends WooCommerce with ArsenalPay gateway.
-Version: 1.0.0
+Version: 1.0.1
 Author: Arsenal Media Dev.
 Author URI: https://arsenalpay.ru
 License: GNU General Public License v3.0
@@ -47,16 +47,16 @@ function wc_arsenalpay_init()
             $this->init_settings();
 
             // Get the settings and load them into variables
-            $this->title 		   = $this->get_option( 'title' );
+            $this->title 		   		   = $this->get_option( 'title' );
             $this->description             = $this->get_option( 'description' );
             $this->debug                   = $this->get_option( 'debug' );
             $this->arsenalpay_token        = $this->get_option( 'arsenalpay_token' );
             $this->arsenalpay_other_code   = $this->get_option( 'arsenalpay_other_code' ); 
-            $this->arsenalpay_key	   = $this->get_option( 'arsenalpay_key' );
+            $this->arsenalpay_key	       = $this->get_option( 'arsenalpay_key' );
             $this->arsenalpay_css          = $this->get_option( 'arsenalpay_css' );
             $this->arsenalpay_ip           = $this->get_option( 'arsenalpay_ip' );
             $this->arsenalpay_check_url    = $this->get_option( 'arsenalpay_check_url' );
-            $this->arsenalpay_src	   = $this->get_option( 'arsenalpay_src' );
+            $this->arsenalpay_src	       = $this->get_option( 'arsenalpay_src' );
             $this->arsenalpay_frame_url    = $this->get_option( 'arsenalpay_frame_url' ) ;
             $this->arsenalpay_frame_mode   = $this->get_option( 'arsenalpay_frame_mode' ); 
             $this->arsenalpay_frame_params = $this->get_option( 'arsenalpay_frame_params' );
@@ -236,6 +236,12 @@ function wc_arsenalpay_init()
 				'msisdn'=> '',
 				'css' => $this->arsenalpay_css,
 				'frame' => $this->arsenalpay_frame_mode,
+                'description' => $order->get_customer_order_notes(),
+                'full_name' => $order->get_formatted_shipping_full_name(),
+                'phone' => $order->billing_phone,
+                'email' => $order->billing_email, 
+                'address' => $order->get_formatted_shipping_address(), 
+                'other' => '',
                 );
                 $f_url = $this->arsenalpay_frame_url;
                 $ap_frame_src = $f_url.'?'.http_build_query($url_params, '', '&');
@@ -312,7 +318,7 @@ function wc_arsenalpay_init()
 									// payment/ - response for status change.*/
                     'DATETIME',     /* Date and time in ISO-8601 format, urlencoded.*/
                     'SIGN',         /* Response sign  = md5(md5(ID).md(FUNCTION).md5(RRN).md5(PAYER).md5(AMOUNT).
-									// md5(ACCOUNT).md(STATUS).md5(PASSWORD)) */       
+									// md5(ACCOUNT).md(STATUS).md5(PASSWORD)) */ 
                 ); 
 				
                 /**
@@ -322,6 +328,10 @@ function wc_arsenalpay_init()
                 {
                     if( empty( $ars_callback[$key] ) || !array_key_exists( $key, $ars_callback ) )
                     {
+                        if ( 'yes' == $this->debug ) 
+                        {
+                            $this->log->add( 'arsenalpay', 'Error in callback parameters ERR' . $key );
+                        }
                         $this->exitf( 'ERR_'.$key );
                     }
                     else 
@@ -335,20 +345,25 @@ function wc_arsenalpay_init()
 
 
                 $KEY = $this->arsenalpay_key;
-
-                       
+     
                 // Validate Amount
-                if ($wc_order->get_total() != $ars_callback['AMOUNT'] )
+				$less_amount = false; 
+                if ( $wc_order->get_total() == $ars_callback['AMOUNT'] && $ars_callback['MERCH_TYPE'] == '0' )
                 {
-                    if ( 'yes' == $this->debug ) 
+                    $less_amount = false;
+                }
+				elseif ( $wc_order->get_total() > $ars_callback['AMOUNT'] && $ars_callback['MERCH_TYPE'] == '1' && $wc_order->get_total() == $ars_callback['AMOUNT_FULL']) {
+					$less_amount = true;
+				}
+				else {
+					if ( 'yes' == $this->debug ) 
                     {
                         $this->log->add( 'arsenalpay', 'Payment error: Amounts do not match (amount ' . $ars_callback['AMOUNT'] . ')' );
                     }
                     // Put this order on-hold for manual checking
                     $wc_order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $ars_callback['AMOUNT'] ) );
                     $this->exitf( 'ERR_AMOUNT' );
-                }
-
+				}
 
                 //======================================
                 /**
@@ -356,6 +371,10 @@ function wc_arsenalpay_init()
                 */
                 if( !( $this->_checkSign( $ars_callback, $KEY) ) ) 
                 {
+                     if ( 'yes' == $this->debug ) 
+                    {
+                        $this->log->add( 'arsenalpay', 'Error in callback parameters ERR_INVALID_SIGN' );
+                    }
                     $this->exitf( 'ERR_INVALID_SIGN' );
 
                 }
@@ -380,14 +399,25 @@ function wc_arsenalpay_init()
                             Result:
                             OK - success saving
                             ERR - error saving*/
-                    $wc_order->add_order_note( __( 'Payment completed', 'wc-arsenalpay' ) );
-                    $wc_order->payment_complete();
+					if ( $less_amount == true ) {
+                        $wc_order->update_status( 'processing' );
+						$wc_order->add_order_note( sprintf(__( "Payment received with less amount equal to %s.", 'wc-arsenalpay' ), $ars_callback['AMOUNT'] ) );
+					    
+                    } 
+					else {
+						$wc_order->add_order_note( __( 'Payment completed.', 'wc-arsenalpay' ) );
+                        $wc_order->payment_complete();
+					}
                     $woocommerce->cart->empty_cart();
                     $this->exitf('OK');  
                 }
                 else 
                 {   
                     $wc_order->update_status( 'failed', sprintf( __( 'Payment failed via callback.', 'woocommerce' ) ) );
+                    if ( 'yes' == $this->debug ) 
+                    {
+                        $this->log->add( 'arsenalpay', 'Error in callback' );
+                    }
                     $this->exitf('ERR');
                 }
             }
@@ -402,7 +432,6 @@ function wc_arsenalpay_init()
             else if (isset($_GET['arsenalpay']) AND $_GET['arsenalpay'] == 'fail')
             {   
                 $wc_order = wc_get_order($ars_callback['ACCOUNT']);
-                var_dump($wc_order);
                 $wc_order->update_status( 'failed', sprintf( __( 'Payer cancelled the payment or error occured. Redirected to fail page.', 'woocommerce' ) ) );
                 wp_redirect($wc_order->get_cancel_order_url());
 		exit; 
