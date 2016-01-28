@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: ArsenalPay
-Plugin URI: https://arsenalpay.ru/site/cmsplugins
+Plugin URI: https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS
 Description: Extends WooCommerce with ArsenalPay gateway.
 Version: 1.0.0
 Author: Arsenal Media Dev.
