@@ -18,7 +18,7 @@ Basic feature list:
  
 ## How to install
 1. Login to the WordPress admin section.
-2. Go to **Plugins>Add New>Upload Plugin**.
+2. Go to **Plugins>Add New**.
 3. Search for **ArsenalPay for WooCommerce**.
 4. Click **Install Now** and then **Activate Plugin**.
 
@@ -65,7 +65,7 @@ After successful installation and proper settings new choice of payment method w
 
 ### УСТАНОВКА
 1. Зайдите в администрирование WordPress;
-2. Пройдите в **Плагины>Добавить новый>Загрузить плагин**;
+2. Пройдите в **Плагины>Добавить новый**;
 3. Найдите плагин **ArsenalPay for WooCommerce**;
 4. Нажмите на **Установить** и затем **Активировать плагин**.
 
