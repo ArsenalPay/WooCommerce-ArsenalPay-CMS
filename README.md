@@ -5,9 +5,9 @@
 [Arsenal Pay processing center]( https://arsenalpay.ru/)
 
 ## Version
-1.0.0
+1.0.1
 
-*Has been tested on WordPress 4.0/4.0.1 and WooCommerce 2.2.4/2.2.8*
+*Has been tested on WordPress from 4.0 to 4.4.1 and WooCommerce from 2.2.4 to 2.5.1*
 
 Basic feature list:
 
@@ -17,9 +17,9 @@ Basic feature list:
  * Supports two languages (Russian, English).
  
 ## How to install
-1. Download zip archive from `https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS/` .
-2. Login to the WordPress admin section. 
-3. Go to **Plugins>Add New>Upload Plugin** and choose the right location of downloaded plugin archive.
+1. Login to the WordPress admin section.
+2. Go to **Plugins>Add New>Upload Plugin**.
+3. Search for **ArsenalPay for WooCommerce**.
 4. Click **Install Now** and then **Activate Plugin**.
 
 
@@ -64,9 +64,9 @@ After successful installation and proper settings new choice of payment method w
 * Плагин поддерживает русский и английский языки.
 
 ### УСТАНОВКА
-1. Загрузите zip архив плагина из репозитория `https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS/` ;
-2. Зайдите в администрирование WordPress;
-3. Пройдите в **Плагины>Добавить новый>Загрузить плагин** и выберите файл с загруженным архивом;
+1. Зайдите в администрирование WordPress;
+2. Пройдите в **Плагины>Добавить новый>Загрузить плагин**;
+3. Найдите плагин **ArsenalPay for WooCommerce**;
 4. Нажмите на **Установить** и затем **Активировать плагин**.
 
 ### НАСТРОЙКА
