@@ -5,9 +5,9 @@
 [Arsenal Pay processing center]( https://arsenalpay.ru/)
 
 ## Version
-1.0.1
+1.0.2
 
-*Has been tested on WordPress from 4.0 to 4.4.1 and WooCommerce from 2.2.4 to 2.5.1*
+*Has been tested on WordPress from 4.0 to 4.5 and WooCommerce from 2.2.4 to 2.5.1*
 
 Basic feature list:
 

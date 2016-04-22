@@ -3,7 +3,7 @@
 Plugin Name: ArsenalPay
 Plugin URI: https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS
 Description: Extends WooCommerce with ArsenalPay gateway.
-Version: 1.0.1
+Version: 1.0.2
 Author: Arsenal Media Dev.
 Author URI: https://arsenalpay.ru
 License: GNU General Public License v3.0
@@ -237,10 +237,10 @@ function wc_arsenalpay_init()
 				'css' => $this->arsenalpay_css,
 				'frame' => $this->arsenalpay_frame_mode,
                 'description' => $order->get_customer_order_notes(),
-                'full_name' => $order->get_formatted_shipping_full_name(),
+                'full_name' => strip_tags($order->get_formatted_shipping_full_name()),
                 'phone' => $order->billing_phone,
                 'email' => $order->billing_email, 
-                'address' => $order->get_formatted_shipping_address(), 
+                'address' => strip_tags($order->get_formatted_shipping_address()), 
                 'other' => '',
                 );
                 $f_url = $this->arsenalpay_frame_url;

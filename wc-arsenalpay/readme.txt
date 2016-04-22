@@ -4,8 +4,8 @@ Donate link: https://arsenalpay.ru/support.html
 Tags: payment gateway, woocommerce, payment system, e-commerce
 Requires at least: 4.0
 Requires WooCommerce at least: 2.2.4
-Tested up to: 4.4.1
-Stable tag: 1.0.1
+Tested up to: 4.5
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,8 @@ You can find answers to frequently asked question [here](https://arsenalpay.ru/s
 * Added opportunity to send additional parameters to payment frame.
 * Edited the callback function allowing to handle the callback amount less than the order total amount. 
 
+= 1.0.2 =
+* Bag of passing parameters to payment page fixed.
 
 Here's a link to [ArsenalPay website](https://arsenalpay.ru/ "ArsenalPay payment gateway") and one to [ArsenalPay support](https://arsenalpay.ru/support.html "Support").
 
@@ -122,3 +124,6 @@ Here's a link to [ArsenalPay website](https://arsenalpay.ru/ "ArsenalPay payment
 
 = 1.0.1 =
 Upgrade if you need to handle the amount in callback less that the total amount of the order. Or need to send additional parameters to the payment frame.
+
+= 1.0.2 =
+Upgrade to fix bag with passing params.
