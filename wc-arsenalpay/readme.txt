@@ -3,13 +3,13 @@ Contributors: ArsenalPay
 Donate link: https://arsenalpay.ru/support.html
 Tags: payment gateway, woocommerce, payment system, e-commerce
 Requires at least: 4.0
-Requires WooCommerce at least: 2.2.4
-Tested up to: 4.5
-Stable tag: 1.0.2
+Requires WooCommerce at least: 3.3.2
+Tested up to: 4.8
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Accept major card(VISA/Masercard/Maestro) and mobile (MTS/Beeline/TELE2/Rostelecom) payments with ArsenalPay on your website.
+Accept major card(VISA/Masercard/Maestro/Mir) and mobile (MTS/Beeline/TELE2/Rostelecom) payments with ArsenalPay on your website.
 
 == Description ==
  
@@ -74,16 +74,10 @@ pay@arsenalpay.ru
 3. Make following settings:
  - Check the box next to **Enable ArsenalPay**.
  - You can edit **Title** and **Description** of ArsenalPay payment method as you would like to display it at your site.
- - Fill out **Unique token**, **Sign key** fields with your received token and key.
- - Check **Frame URL** to be as `https://arsenalpay.ru/payframe/pay.php`
- - Choose payment type in **src parameter** as `card` to activate payments with bank cards or `mk` to activate payments from mobile phone accounts.
- - **css parameter**. You can specify CSS file to apply it to the view of payment frame by inserting css-file url.
- - You can specify IP address only from which it will be allowed to receive callback requests about payments from ArsenalPay onto your site in **Allowed IP address** field.
+ - Fill out **Callback key**, **Widget id** , **Widget key** fields with your received callback key, widget id and widget key.
  - Your online shop will be receiving callback requests about processed payments for automatically order status change. The callbacks will being received onto the address assigned in **Callback URL** string upside of the payment plugin settings. Callback is set to address: `http(s)://yourSiteAddress/?wc-api=wc_gw_arsenalpay&arsenalpay=callback`
- - If it is needed to add one more step to check a payer order number before payment processing you should fill out the field of **Check URL** in the module settings with url-address to which ArsenalPay will be sending requests with check parameters. By default the address is the same with **Callback URL**.
- - Set **Frame mode** as `1` to display payment frame inside your site, otherwise a payer will be redirected directly to the payment frame url.
- - You can adjust **width**, **height**, **frameborder** and **scrolling** of ArsenalPay payment frame by setting iframe parameters. For instance, you can insert string in format: `width="100%" height"500" frameborder="0" scrolling="no"`. Go to html standard reference for more detailes about iframe parameters.
  - You can enable/disable logging by checking/unchecking the box.
+ - You can specify IP address only from which it will be allowed to receive callback requests about payments from ArsenalPay onto your site in **Allowed IP address** field.
 5. Finally, save your settings by clicking on **Save Changes**
 
 
@@ -118,6 +112,9 @@ You can find answers to frequently asked question [here](https://arsenalpay.ru/s
 = 1.0.2 =
 * Bag of passing parameters to payment page fixed.
 
+= 1.0.3 =
+* The payment module is transferred from the frame to the widget.
+
 Here's a link to [ArsenalPay website](https://arsenalpay.ru/ "ArsenalPay payment gateway") and one to [ArsenalPay support](https://arsenalpay.ru/support.html "Support").
 
 == Upgrade Notice ==
@@ -127,3 +124,6 @@ Upgrade if you need to handle the amount in callback less that the total amount 
 
 = 1.0.2 =
 Upgrade to fix bag with passing params.
+
+= 1.0.3 =
+Upgrade to transfer frontend frame to the widget.
