@@ -7,7 +7,7 @@
 ## Version
 1.0.3
 
-*Has been tested on WordPress from 4.0 to 4.8.3 and WooCommerce from 2.2.4 to 3.2.3
+*Has been tested on WordPress from 4.0 to 4.9.4 and WooCommerce from 2.2.4 to 3.3.1
 
 Basic feature list:
 
@@ -127,9 +127,3 @@ ArsenalPay – увеличить прибыль просто!
 pay@arsenalpay.ru 
 
 [arsenalpay.ru](https://arsenalpay.ru)
- 
-
-
-
-
- 
