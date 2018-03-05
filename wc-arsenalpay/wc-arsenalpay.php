@@ -4,7 +4,7 @@
 Plugin Name: ArsenalPay
 Plugin URI: https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS
 Description: Extends WooCommerce with ArsenalPay gateway.
-Version: 1.0.3
+Version: 1.1.1
 Author: Arsenal Media Dev.
 Author URI: https://arsenalpay.ru
 License: GNU General Public License v3.0
@@ -37,6 +37,7 @@ function wc_arsenalpay_init() {
 	 * Gateway class
 	 */
 	class WC_GW_Arsenalpay extends WC_Payment_Gateway {
+	    private $_callback;
 		public function __construct() {
 			global $woocommerce;
 			$this->id                 = 'arsenalpay';
@@ -215,7 +216,7 @@ function wc_arsenalpay_init() {
 			$callback_params = stripslashes_deep( $_POST );
 
 			$REMOTE_ADDR = $_SERVER["REMOTE_ADDR"];
-			$this->log( 'Remote IP: ' . $REMOTE_ADDR );
+			$this->log( 'Remote IP: ' . $REMOTE_ADDR . ' with POST params: ' . json_encode($callback_params) );
 
 			$IP_ALLOW = trim($this->arsenalpay_ip);
 			if (strlen($IP_ALLOW) > 0 && $IP_ALLOW != $REMOTE_ADDR) {
@@ -226,53 +227,54 @@ function wc_arsenalpay_init() {
 			if ( ! $this->check_params( $callback_params ) ) {
 				$this->exitf( 'ERR' );
 			}
-			$order    = wc_get_order( $callback_params['ACCOUNT'] );
-			$function = $callback_params['FUNCTION'];
+			$this->_callback = $callback_params;
+			$order           = wc_get_order( $this->_callback['ACCOUNT'] );
+			$function        = $this->_callback['FUNCTION'];
 
 			if ( ! $order || empty( $order ) || ! ( $order instanceof WC_Order ) ) {
 				if ( $function == "check" ) {
-					$this->log( " Order %s doesn't exist. ", $callback_params['ACCOUNT'] );
+					$this->log( " Order %s doesn't exist. ", $this->_callback['ACCOUNT'] );
 					$this->exitf( 'NO' );
 				}
 				$this->exitf( "ERR" );
 			}
 
-			if ( ! ( $this->check_sign( $callback_params, $this->arsenalpay_callback_key ) ) ) {
+			if ( ! ( $this->check_sign( $this->_callback, $this->arsenalpay_callback_key ) ) ) {
 				$this->log( 'Error in callback parameters ERR_INVALID_SIGN' );
 				$this->exitf( 'ERR' );
 			}
 
 			switch ( $function ) {
 				case 'check':
-					$this->callback_check( $callback_params, $order, $woocommerce );
+					$this->callback_check($order, $woocommerce );
 					break;
 
 				case 'payment':
-					$this->callback_payment( $callback_params, $order, $woocommerce );
+					$this->callback_payment($order, $woocommerce );
 					break;
 
 				case 'cancel':
-					$this->callback_cancel( $callback_params, $order, $woocommerce );
+					$this->callback_cancel($order, $woocommerce );
 					break;
 
 				case 'cancelinit':
-					$this->callback_cancel( $callback_params, $order, $woocommerce );
+					$this->callback_cancel($order, $woocommerce );
 					break;
 
 				case 'refund':
-					$this->callback_refund( $callback_params, $order, $woocommerce );
+					$this->callback_refund($order, $woocommerce );
 					break;
 
 				case 'reverse':
-					$this->callback_reverse( $callback_params, $order, $woocommerce );
+					$this->callback_reverse($order, $woocommerce );
 					break;
 
 				case 'reversal':
-					$this->callback_reverse( $callback_params, $order, $woocommerce );
+					$this->callback_reverse($order, $woocommerce );
 					break;
 
 				case 'hold':
-					$this->callback_hold( $callback_params, $order, $woocommerce );
+					$this->callback_hold($order, $woocommerce );
 					break;
 
 				default: {
@@ -283,39 +285,116 @@ function wc_arsenalpay_init() {
 			}
 		}
 
-		function callback_check( $callback_params, $order, $woocommerce ) {
+		private function callback_check($order, $woocommerce ) {
 			if ( $order->is_paid() || $order->has_status( 'cancelled' ) || $order->has_status( 'refunded' ) ) {
 				$this->log( 'Aborting, Order #' . $order->get_id() . ' is ' . $order->get_status() );
 				$this->exitf( 'ERR' );
 			}
-			$isCorrectAmount = ( $order->get_total() == $callback_params['AMOUNT'] && $callback_params['MERCH_TYPE'] == '0' ) ||
-			                   ( $order->get_total() > $callback_params['AMOUNT'] && $callback_params['MERCH_TYPE'] == '1' && $order->get_total() == $callback_params['AMOUNT_FULL'] );
+			$isCorrectAmount = ( $order->get_total() == $this->_callback['AMOUNT'] && $this->_callback['MERCH_TYPE'] == '0' ) ||
+			                   ( $order->get_total() > $this->_callback['AMOUNT'] && $this->_callback['MERCH_TYPE'] == '1' && $order->get_total() == $this->_callback['AMOUNT_FULL'] );
 			if ( ! $isCorrectAmount ) {
-				$this->log( 'Payment error: Amounts do not match (amount ' . $callback_params['AMOUNT'] . ')' );
+				$this->log( 'Payment error: Amounts do not match (amount ' . $this->_callback['AMOUNT'] . ')' );
 				// Put this order on-hold for manual checking
-				$order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $callback_params['AMOUNT'] ) );
+				$order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $this->_callback['AMOUNT'] ) );
 				$this->exitf( 'ERR' );
 			}
+
+			$fiscal = array();
+			if (isset($this->_callback['OFD']) && $this->_callback['OFD'] == 1) {
+                $fiscal = $this->prepareFiscalDocument($order);
+                if (!$fiscal) {
+                    $this->log('Error during preparing fiscal document!');
+                    $this->exitf('ERR');
+                }
+            }
 			$order->update_status( 'pending', sprintf( __( 'Order number has been checked.', 'wc-arsenalpay' ) ) );
 			$order->add_order_note( __( 'Waiting for payment confirmation after checking.', 'wc-arsenalpay' ) );
-			$this->exitf( 'YES' );
+			$this->exitf( 'YES', $fiscal );
 		}
 
 
-		function callback_payment( $callback_params, $order, $woocommerce ) {
+		private function preparePhone($phone) {
+			$phone = preg_replace('/[^0-9]/','',$phone);
+			if (strlen($phone) < 10) {
+				return false;
+			}
+			if (strlen($phone) == 10) {
+				return $phone;
+			}
+			if (strlen($phone) == 11) {
+				return substr($phone, 1);
+			}
+
+			return false;
+
+		}
+
+		/**
+		 * @param $order WC_Order
+		 *
+		 * @return array
+		 */
+		private function prepareFiscalDocument($order) {
+			$fiscal = array(
+				"id"      => $this->_callback['ID'],
+				"type"    => "cell",
+				"receipt" => [
+					"attributes" => [
+						"email" => $order->get_billing_email(),
+					],
+					"items"      => array(),
+				]
+
+			);
+
+			$phone = $this->preparePhone($order->get_billing_phone());
+			if ($phone) {
+				$fiscal['receipt']['attributes']['phone'] = $phone;
+			}
+			/**
+			 * @var $line_item WC_Order_Item
+			 */
+			foreach ($order->get_items('line_item') as $line_item) {
+				$item = array(
+					"name"     => $line_item->get_name(),
+					"quantity" => $line_item->get_quantity(),
+					"price"    => $order->get_item_total($line_item, true, true),
+					"sum"      => $order->get_line_total($line_item, true, true),
+//                    "tax" => ???,
+				);
+				$fiscal['receipt']['items'][] = $item;
+			}
+			/**
+			 * @var $shipping WC_Order_Item
+			 */
+			foreach ($order->get_items('shipping') as $shipping) {
+				$item = array(
+					"name"     => $shipping->get_name(),
+					"quantity" => $shipping->get_quantity(),
+					"price"    => $order->get_item_total($shipping, true, true),
+					"sum"      => $order->get_line_total($shipping, true, true),
+//                    "tax" => ???,
+				);
+				$fiscal['receipt']['items'][] = $item;
+            }
+
+            return $fiscal;
+        }
+
+		private function callback_payment($order, $woocommerce ) {
 			if ( $order->is_paid() || $order->has_status( 'cancelled' ) || $order->has_status( 'refunded' ) ) {
 				$this->log( 'Aborting, Order #' . $order->get_id() . ' is ' . $order->get_status() );
 				$this->exitf( 'ERR' );
 			}
 
-			if ( $order->get_total() == $callback_params['AMOUNT'] && $callback_params['MERCH_TYPE'] == '0' ) {
+			if ( $order->get_total() == $this->_callback['AMOUNT'] && $this->_callback['MERCH_TYPE'] == '0' ) {
 				$order->add_order_note( __( 'Payment completed.', 'wc-arsenalpay' ) );
-			} elseif ( $order->get_total() > $callback_params['AMOUNT'] && $callback_params['MERCH_TYPE'] == '1' && $order->get_total() == $callback_params['AMOUNT_FULL'] ) {
-				$order->add_order_note( sprintf( __( "Payment received with less amount equal to %s.", 'wc-arsenalpay' ), $callback_params['AMOUNT'] ) );
+			} elseif ( $order->get_total() > $this->_callback['AMOUNT'] && $this->_callback['MERCH_TYPE'] == '1' && $order->get_total() == $this->_callback['AMOUNT_FULL'] ) {
+				$order->add_order_note( sprintf( __( "Payment received with less amount equal to %s.", 'wc-arsenalpay' ), $this->_callback['AMOUNT'] ) );
 			} else {
-				$this->log( 'Payment error: Amounts do not match (amount ' . $callback_params['AMOUNT'] . ')' );
+				$this->log( 'Payment error: Amounts do not match (amount ' . $this->_callback['AMOUNT'] . ')' );
 				// Put this order on-hold for manual checking
-				$order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $callback_params['AMOUNT'] ) );
+				$order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $this->_callback['AMOUNT'] ) );
 				$this->exitf( 'ERR' );
 			}
 			$order->payment_complete();
@@ -323,17 +402,17 @@ function wc_arsenalpay_init() {
 			$this->exitf( 'OK' );
 		}
 
-		function callback_hold( $callback_params, $order, $woocommerce ) {
+		private function callback_hold($order, $woocommerce ) {
 			if ( ! $order->has_status( 'on-hold' ) && ! $order->has_status( 'pending' ) ) {
 				$this->log( 'Aborting, Order #' . $order->get_id() . ' has not been checked.' );
 				$this->exitf( 'ERR' );
 			}
-			$isCorrectAmount = ( $order->get_total() == $callback_params['AMOUNT'] && $callback_params['MERCH_TYPE'] == '0' ) ||
-			                   ( $order->get_total() > $callback_params['AMOUNT'] && $callback_params['MERCH_TYPE'] == '1' && $order->get_total() == $callback_params['AMOUNT_FULL'] );
+			$isCorrectAmount = ( $order->get_total() == $this->_callback['AMOUNT'] && $this->_callback['MERCH_TYPE'] == '0' ) ||
+			                   ( $order->get_total() > $this->_callback['AMOUNT'] && $this->_callback['MERCH_TYPE'] == '1' && $order->get_total() == $this->_callback['AMOUNT_FULL'] );
 			if ( ! $isCorrectAmount ) {
-				$this->log( 'Payment error: Amounts do not match (amount ' . $callback_params['AMOUNT'] . ')' );
+				$this->log( 'Payment error: Amounts do not match (amount ' . $this->_callback['AMOUNT'] . ')' );
 				// Put this order on-hold for manual checking
-				$order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $callback_params['AMOUNT'] ) );
+				$order->update_status( 'on-hold', sprintf( __( 'Validation error: ArsenalPay amounts do not match (amount %s).', 'woocommerce' ), $this->_callback['AMOUNT'] ) );
 				$this->exitf( 'ERR' );
 			}
 			$order->update_status( 'on-hold', sprintf( __( 'Order number has been holden.', 'wc-arsenalpay' ) ) );
@@ -341,7 +420,7 @@ function wc_arsenalpay_init() {
 			$this->exitf( 'OK' );
 		}
 
-		function callback_cancel( $callback_params, $order, $woocommerce ) {
+		private function callback_cancel($order, $woocommerce ) {
 			if ( ! $order->has_status( 'on-hold' ) && ! $order->has_status( 'pending' ) ) {
 				$this->log( 'Aborting, Order #' . $order->get_id() . ' has not been checked status.' );
 				$this->exitf( 'ERR' );
@@ -351,7 +430,7 @@ function wc_arsenalpay_init() {
 			$this->exitf( 'OK' );
 		}
 
-		function callback_refund( $callback_params, $order, $woocommerce ) {
+		private function callback_refund($order, $woocommerce ) {
 			if ( ! $order->is_paid() && ! $order->has_status( 'refunded' ) ) {
 				$this->log( 'Aborting, Order #' . $order->get_id() . ' is not paid.' );
 				$this->exitf( 'ERR' );
@@ -359,15 +438,15 @@ function wc_arsenalpay_init() {
 
 			$arsenalPaidSum = $order->get_total() - $order->get_total_refunded();
 
-			$isCorrectAmount = ( $callback_params['MERCH_TYPE'] == 0 && $arsenalPaidSum >= $callback_params['AMOUNT'] ) ||
-			                   ( $callback_params['MERCH_TYPE'] == 1 && $arsenalPaidSum >= $callback_params['AMOUNT'] && $arsenalPaidSum >= $callback_params['AMOUNT_FULL'] );
+			$isCorrectAmount = ($this->_callback['MERCH_TYPE'] == 0 && $arsenalPaidSum >= $this->_callback['AMOUNT'] ) ||
+			                   ($this->_callback['MERCH_TYPE'] == 1 && $arsenalPaidSum >= $this->_callback['AMOUNT'] && $arsenalPaidSum >= $this->_callback['AMOUNT_FULL'] );
 			if ( ! $isCorrectAmount ) {
-				$this->log( "Refund error: Paid amount({$arsenalPaidSum}) < refund amount({$callback_params['AMOUNT']})" );
+				$this->log( "Refund error: Paid amount({$arsenalPaidSum}) < refund amount({$this->_callback['AMOUNT']})" );
 				$this->exitf( 'ERR' );
 			}
 
 			$res = wc_create_refund( array(
-				'amount'         => $callback_params['AMOUNT'],
+				'amount'         => $this->_callback['AMOUNT'],
 				'reason'         => 'Partition refund via Arsenalpay',
 				'order_id'       => $order->get_id(),
 				'refund_payment' => false,
@@ -379,7 +458,7 @@ function wc_arsenalpay_init() {
 			$this->exitf( 'OK' );
 		}
 
-		function callback_reverse( $callback_params, $order, $woocommerce ) {
+		private function callback_reverse($order, $woocommerce ) {
 			if ( ! $order->is_paid() ) {
 				$this->log( 'Aborting, Order #' . $order->get_id() . ' is not complete.' );
 				$this->exitf( 'ERR' );
@@ -387,11 +466,11 @@ function wc_arsenalpay_init() {
 
 			$arsenalPaidSum = $order->get_total() - $order->get_total_refunded();
 
-			$isCorrectAmount = ( $callback_params['MERCH_TYPE'] == 0 && $arsenalPaidSum == $callback_params['AMOUNT'] ) ||
-			                   ( $callback_params['MERCH_TYPE'] == 1 && $arsenalPaidSum >= $callback_params['AMOUNT'] && $arsenalPaidSum == $callback_params['AMOUNT_FULL'] );
+			$isCorrectAmount = ($this->_callback['MERCH_TYPE'] == 0 && $arsenalPaidSum == $this->_callback['AMOUNT'] ) ||
+			                   ($this->_callback['MERCH_TYPE'] == 1 && $arsenalPaidSum >= $this->_callback['AMOUNT'] && $arsenalPaidSum == $this->_callback['AMOUNT_FULL'] );
 
 			if ( ! $isCorrectAmount ) {
-				$this->log( 'Reverse error: Amounts do not match (amount ' . $callback_params['AMOUNT'] . ' and ' . $arsenalPaidSum . ')' );
+				$this->log( 'Reverse error: Amounts do not match (amount ' . $this->_callback['AMOUNT'] . ' and ' . $arsenalPaidSum . ')' );
 				$this->exitf( 'ERR' );
 			}
 			$order->update_status( 'refunded', sprintf( __( 'Order has been reversed', 'wc-arsenalpay' ) ) );
@@ -458,7 +537,16 @@ function wc_arsenalpay_init() {
 			}
 		}
 
-		public function exitf( $msg ) {
+		public function exitf( $msg, $ofd = array() ) {
+
+		    if (isset($this->_callback['FORMAT']) && $this->_callback['FORMAT'] == 'json') {
+		        $response = array("response" => $msg);
+		        if (isset($this->_callback['OFD']) && $this->_callback['OFD'] == 1 && $ofd) {
+		            $response['ofd'] = $ofd;
+                }
+                $msg = json_encode($response);
+            }
+
 			$this->log( " $msg " );
 			echo $msg;
 			die;

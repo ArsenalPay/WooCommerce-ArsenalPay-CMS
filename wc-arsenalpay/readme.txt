@@ -3,9 +3,9 @@ Contributors: ArsenalPay
 Donate link: https://arsenalpay.ru/support.html
 Tags: payment gateway, woocommerce, payment system, e-commerce
 Requires at least: 4.0
-Requires WooCommerce at least: 3.3.2
+Requires WooCommerce at least: 3.3.3
 Tested up to: 4.8
-Stable tag: 1.0.3
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,9 @@ You can find answers to frequently asked question [here](https://arsenalpay.ru/s
 = 1.0.3 =
 * The payment module is transferred from the frame to the widget.
 
+= 1.1.1 =
+* Added support for online cashbox
+
 Here's a link to [ArsenalPay website](https://arsenalpay.ru/ "ArsenalPay payment gateway") and one to [ArsenalPay support](https://arsenalpay.ru/support.html "Support").
 
 == Upgrade Notice ==
@@ -127,3 +130,6 @@ Upgrade to fix bag with passing params.
 
 = 1.0.3 =
 Upgrade to transfer frontend frame to the widget.
+
+= 1.1.1 =
+Upgrade to be able to use the online cashbox
