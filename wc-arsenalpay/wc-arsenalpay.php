@@ -337,7 +337,7 @@ function wc_arsenalpay_init() {
 		private function prepareFiscalDocument($order) {
 			$fiscal = array(
 				"id"      => $this->_callback['ID'],
-				"type"    => "cell",
+				"type"    => "sell",
 				"receipt" => [
 					"attributes" => [
 						"email" => $order->get_billing_email(),
