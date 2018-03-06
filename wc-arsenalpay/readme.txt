@@ -92,7 +92,7 @@ If you do not already have a tax regime on your site:
 
 You need to compare taxes in your store and in the Federal Tax Service. Settings for customization:
  - **Default tax rate** - The default tax rate will be in the check, if no other rate is specified on the goods card.
- - If you have created tax rates on the site, you will see a list of taxes: on left side tax rate in your store, on right - in the Tax Federal Service. Please compare them.
+ - If you have created tax rates on the site, you will see a list of taxes: on left side tax rate in your store, on right - in the Federal Tax Service. Please compare them.
  - Click **"Save Changes"** to complete the setup.
 
 == How to uninstall ==

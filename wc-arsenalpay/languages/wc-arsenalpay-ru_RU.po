@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-03-06 16:35+1000\n"
-"PO-Revision-Date: 2018-03-06 16:35+1000\n"
+"POT-Creation-Date: 2018-03-07 08:56+1000\n"
+"PO-Revision-Date: 2018-03-07 08:57+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -116,11 +116,15 @@ msgstr ""
 "указана другая ставка. "
 
 #: wc-arsenalpay.php:190
+#, fuzzy
+#| msgid ""
+#| "On the left is the tax rate in your store, right in the Tax Federal "
+#| "Service. Match them."
 msgid ""
-"On the left is the tax rate in your store, right in the Tax Federal Service. "
+"On the left is the tax rate in your store, right in the Federal Tax Service. "
 "Match them."
 msgstr ""
-"Слева - ставка НДС в вашем магазине, справа - в НФС. Пожалуйста, сопоставьте "
+"Слева - ставка НДС в вашем магазине, справа - в ФНС. Пожалуйста, сопоставьте "
 "их."
 
 #: wc-arsenalpay.php:214

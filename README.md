@@ -48,7 +48,7 @@ If you do not already have a tax regime on your site:
 
 You need to compare taxes in your store and in the Federal Tax Service. Settings for customization:
  - **Default tax rate** - The default tax rate will be in the check, if no other rate is specified on the goods card.
- - If you have created tax rates on the site, you will see a list of taxes: on left side tax rate in your store, on right - in the Tax Federal Service. Please compare them.
+ - If you have created tax rates on the site, you will see a list of taxes: on left side tax rate in your store, on right - in the Federal Tax Service. Please compare them.
  - Click **"Save Changes"** to complete the setup.
 
 ## How to uninstall
@@ -101,9 +101,9 @@ After successful installation and proper settings new choice of payment method w
 4. Создайте налоговые ставки, информацию можно найти [на сайте woocommerce](https://docs.woocommerce.com/document/setting-up-taxes-in-woocommerce/)
 5. Вернитесь в настройки платежной системы **Arsenalpay**
 
-Необходимо сопоставить налоги в вашем магазине и в НФС. Параметры для настройки:
+Необходимо сопоставить налоги в вашем магазине и в ФНС. Параметры для настройки:
  - **Налоговая ставка по умолчанию** - Налоговая ставка по умолчанию будет в чеке, если в карточке товара не указана другая ставка. 
- - Если у вас созданы налоговые ставки на сайте, то вы увидите список налогов: Слева - ставка НДС в вашем магазине, справа - в НФС. Пожалуйста, сопоставьте их.
+ - Если у вас созданы налоговые ставки на сайте, то вы увидите список налогов: Слева - ставка НДС в вашем магазине, справа - в ФНС. Пожалуйста, сопоставьте их.
  - Нажмите **"Сохранить изменения"** для завершения найстройки.
 
 

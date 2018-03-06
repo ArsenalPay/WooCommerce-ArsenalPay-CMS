@@ -187,7 +187,7 @@ function wc_arsenalpay_init() {
 			$WC_taxes = $this->_get_all_wc_taxes();
 			if (count($WC_taxes) > 0) {
 			    $this->form_fields["tax_title"] = array(
-					"title" => __('On the left is the tax rate in your store, right in the Tax Federal Service. Match them.', 'wc-arsenalpay'),
+					"title" => __('On the left is the tax rate in your store, right in the Federal Tax Service. Match them.', 'wc-arsenalpay'),
 					"type"  => 'title',
 				);
             }
