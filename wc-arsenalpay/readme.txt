@@ -78,8 +78,22 @@ pay@arsenalpay.ru
  - Your online shop will be receiving callback requests about processed payments for automatically order status change. The callbacks will being received onto the address assigned in **Callback URL** string upside of the payment plugin settings. Callback is set to address: `http(s)://yourSiteAddress/?wc-api=wc_gw_arsenalpay&arsenalpay=callback`
  - You can enable/disable logging by checking/unchecking the box.
  - You can specify IP address only from which it will be allowed to receive callback requests about payments from ArsenalPay onto your site in **Allowed IP address** field.
+ - Compare the tax rates in your store with the tax rates that will come to the Federal Tax Service.
 5. Finally, save your settings by clicking on **Save Changes**
 
+Settings of tax rates is only necessary if you are connected to online checkout. See https://arsenalpay.ru/documentation.html#54-fz-integraciya-s-onlajn-kassoj. For connection, please contact our manager.
+
+If you do not already have a tax regime on your site:
+1. Go to the administration panel **WooCommerce> Settings> General**.
+2. Select **"Include taxes and calculate taxes"**
+3. Click the **Save** button
+4. Set up taxes, information can be found on https://docs.woocommerce.com/document/setting-up-taxes-in-woocommerce/
+5. Return to the settings of the payment system **Arsenalpay**
+
+You need to compare taxes in your store and in the Federal Tax Service. Settings for customization:
+ - **Default tax rate** - The default tax rate will be in the check, if no other rate is specified on the goods card.
+ - If you have created tax rates on the site, you will see a list of taxes: on left side tax rate in your store, on right - in the Tax Federal Service. Please compare them.
+ - Click **"Save Changes"** to complete the setup.
 
 == How to uninstall ==
 1. Go to **Plugins** in WordPress admin section and find **ArsenalPay** in plugin list.

@@ -33,8 +33,23 @@ Basic feature list:
  - Your online shop will be receiving callback requests about processed payments for automatically order status change. The callbacks will being received onto the address assigned in **Callback URL** string upside of the payment plugin settings. Callback is set to address: `http(s)://yourSiteAddress/?wc-api=wc_gw_arsenalpay&arsenalpay=callback`
  - You can enable/disable logging by checking/unchecking the box.
  - You can specify IP address only from which it will be allowed to receive callback requests about payments from ArsenalPay onto your site in **Allowed IP address** field.
+ - To setting the rates, see **"Setting Tax Rates"**
 5. Finally, save your settings by clicking on **Save Changes**
 
+## Settings tax rates
+Settings of tax rates is only necessary if you are connected to [online checkout](https://arsenalpay.ru/documentation.html#54-fz-integraciya-s-onlajn-kassoj). For connection, please contact our manager.
+
+If you do not already have a tax regime on your site:
+1. Go to the administration panel **WooCommerce> Settings> General**.
+2. Select **"Include taxes and calculate taxes"**
+3. Click the **Save** button
+4. Set up taxes, information can be found on the [woocommerce website](https://docs.woocommerce.com/document/setting-up-taxes-in-woocommerce/)
+5. Return to the settings of the payment system **Arsenalpay**
+
+You need to compare taxes in your store and in the Federal Tax Service. Settings for customization:
+ - **Default tax rate** - The default tax rate will be in the check, if no other rate is specified on the goods card.
+ - If you have created tax rates on the site, you will see a list of taxes: on left side tax rate in your store, on right - in the Tax Federal Service. Please compare them.
+ - Click **"Save Changes"** to complete the setup.
 
 ## How to uninstall
 1. Go to **Plugins** in WordPress admin section and find **ArsenalPay** in plugin list.
@@ -73,7 +88,24 @@ After successful installation and proper settings new choice of payment method w
  - Ваш интернет-магазин будет получать уведомления о совершенных платежах. На адрес, указанный в поле **Callback URL** вверху настроек плагина, от ArsenalPay будет поступать запрос с результатом платежа для фиксирования статусов заказа в системе предприятия. Обратный запрос настроен на адрес: `http(s)://адресВашегоСайта/?wc-api=wc_gw_arsenalpay&arsenalpay=callback`
  - Вы можете включать/выключать протоколирование для управления сохранением логов для отладки.
  - Вы можете задать ip-адрес, только с которого будут разрешены обратные запросы о совершаемых платежах, в поле **Разрешенный IP-адрес**.
-7. Закончив, сохраните настройки нажатием на **Сохранить изменения**.
+ - Для настройки налаговых ставок смотрите пункт **"Настройка налоговых ставок"**
+4. Закончив, сохраните настройки нажатием на **Сохранить изменения**.
+
+### Настройка налоговых ставок
+Настройка налоговых ставок необходима только если вы подключены к [онлайн кассе](https://arsenalpay.ru/documentation.html#54-fz-integraciya-s-onlajn-kassoj). Для подключения обратитесь к нашему менеджеру.
+
+Если у вас на сайте еще не включен режим налогов:
+1. Перейдите в панеле администрировании **WooCommerce>Настройки>Основные**.
+2. Выберите пункт **"Включить налоги и расчет налогов"**
+3. Нажмите кнопку **Сохранить** 
+4. Создайте налоговые ставки, информацию можно найти [на сайте woocommerce](https://docs.woocommerce.com/document/setting-up-taxes-in-woocommerce/)
+5. Вернитесь в настройки платежной системы **Arsenalpay**
+
+Необходимо сопоставить налоги в вашем магазине и в НФС. Параметры для настройки:
+ - **Налоговая ставка по умолчанию** - Налоговая ставка по умолчанию будет в чеке, если в карточке товара не указана другая ставка. 
+ - Если у вас созданы налоговые ставки на сайте, то вы увидите список налогов: Слева - ставка НДС в вашем магазине, справа - в НФС. Пожалуйста, сопоставьте их.
+ - Нажмите **"Сохранить изменения"** для завершения найстройки.
+
 
 ### УДАЛЕНИЕ
 1. Пройдите в раздел **Плагины** в администрировании WordPress;

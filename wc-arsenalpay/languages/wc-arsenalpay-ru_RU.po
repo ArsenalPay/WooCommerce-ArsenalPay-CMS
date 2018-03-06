@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-03-06 16:09+1000\n"
-"PO-Revision-Date: 2018-03-06 16:13+1000\n"
+"POT-Creation-Date: 2018-03-06 16:35+1000\n"
+"PO-Revision-Date: 2018-03-06 16:35+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;_x;_n\n"
 "X-Poedit-SearchPath-0: wc-arsenalpay.php\n"
 
-#: wc-arsenalpay.php:46 wc-arsenalpay.php:135 wc-arsenalpay.php:219
+#: wc-arsenalpay.php:46 wc-arsenalpay.php:135 wc-arsenalpay.php:220
 msgid "ArsenalPay"
 msgstr "Включить ArsenalPay"
 
@@ -115,7 +115,7 @@ msgstr ""
 "Налоговая ставка по умолчанию будет в чеке, если в карточке товара не "
 "указана другая ставка. "
 
-#: wc-arsenalpay.php:185
+#: wc-arsenalpay.php:190
 msgid ""
 "On the left is the tax rate in your store, right in the Tax Federal Service. "
 "Match them."
@@ -123,58 +123,58 @@ msgstr ""
 "Слева - ставка НДС в вашем магазине, справа - в НФС. Пожалуйста, сопоставьте "
 "их."
 
-#: wc-arsenalpay.php:213
+#: wc-arsenalpay.php:214
 msgid "Callback URL"
 msgstr "URL для обратного запроса"
 
-#: wc-arsenalpay.php:227
+#: wc-arsenalpay.php:228
 msgid "Gateway Disabled"
 msgstr ""
 
-#: wc-arsenalpay.php:227
+#: wc-arsenalpay.php:228
 msgid "ArsenalPay does not support your store currency."
 msgstr "ArsenalPay не поддерживает валюту Вашего магазина."
 
-#: wc-arsenalpay.php:337
+#: wc-arsenalpay.php:338
 msgid "Payment failed via callback."
 msgstr "Платеж не подтвержился при получении обратного запроса."
 
-#: wc-arsenalpay.php:354 wc-arsenalpay.php:476 wc-arsenalpay.php:494
+#: wc-arsenalpay.php:355 wc-arsenalpay.php:477 wc-arsenalpay.php:495
 #, php-format
 msgid "Validation error: ArsenalPay amounts do not match (amount %s)."
 msgstr ""
 "Ошибка подтверждения: сумма с запросом ArsenalPay не совпадает (сумма %s)."
 
-#: wc-arsenalpay.php:366
+#: wc-arsenalpay.php:367
 msgid "Order number has been checked."
 msgstr "Номер заказа проверен."
 
-#: wc-arsenalpay.php:367
+#: wc-arsenalpay.php:368
 msgid "Waiting for payment confirmation after checking."
 msgstr "Ожидание подтверждения платежа после проверки."
 
-#: wc-arsenalpay.php:468
+#: wc-arsenalpay.php:469
 msgid "Payment completed."
 msgstr "Платеж завершен."
 
-#: wc-arsenalpay.php:471
+#: wc-arsenalpay.php:472
 #, php-format
 msgid "Payment received with less amount equal to %s."
 msgstr "Платеж получен с меньшей суммой равной %s."
 
-#: wc-arsenalpay.php:497
+#: wc-arsenalpay.php:498
 msgid "Order number has been holden."
 msgstr "Заказ в ожидании платежа ."
 
-#: wc-arsenalpay.php:498
+#: wc-arsenalpay.php:499
 msgid "Waiting for payment or cancel confirmation after hold request."
 msgstr "Ожидание оплаты или отмены платежа после hold запроса ."
 
-#: wc-arsenalpay.php:508
+#: wc-arsenalpay.php:509
 msgid "Order has been cancelled"
 msgstr "Заказ был отменен"
 
-#: wc-arsenalpay.php:555
+#: wc-arsenalpay.php:556
 msgid "Order has been reversed"
 msgstr "Возврат платежа"
 
