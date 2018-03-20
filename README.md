@@ -29,7 +29,7 @@ Basic feature list:
 3. Make following settings:
  - Check the box next to **Enable ArsenalPay**.
  - You can edit **Title** and **Description** of ArsenalPay payment method as you would like to display it at your site.
- - Fill out **Callback key**, **Widget id** , **Widget key** fields with your received callback key, widget id and widget key.
+ - Fill out **callbackKey**, **widget** , **widgetKey** fields with your received callbackKey, widget and widgetKey.
  - Your online shop will be receiving callback requests about processed payments for automatically order status change. The callbacks will being received onto the address assigned in **Callback URL** string upside of the payment plugin settings. Callback is set to address: `http(s)://yourSiteAddress/?wc-api=wc_gw_arsenalpay&arsenalpay=callback`
  - You can enable/disable logging by checking/unchecking the box.
  - You can specify IP address only from which it will be allowed to receive callback requests about payments from ArsenalPay onto your site in **Allowed IP address** field.
@@ -84,7 +84,7 @@ After successful installation and proper settings new choice of payment method w
 3. Проведите следуюшие настройки:
  - Проставьте галочку возле **Включить ArsenalPay**.
  - Вы можете изменить **Заголовок** и **Описание** платежного метода ArsenalPay так, как Вам хотелось бы отобразить его на Вашем сайте.
- - Заполните поля **Callback key**, **Widget id**, **Widget key**, присвоенными Вам ключом для подписи, номером виджета и ключем подписи виджета.
+ - Заполните поля **callbackKey**, **widget**, **widgetKey**, присвоенными Вам ключом для подписи, номером виджета и ключем подписи виджета.
  - Ваш интернет-магазин будет получать уведомления о совершенных платежах. На адрес, указанный в поле **Callback URL** вверху настроек плагина, от ArsenalPay будет поступать запрос с результатом платежа для фиксирования статусов заказа в системе предприятия. Обратный запрос настроен на адрес: `http(s)://адресВашегоСайта/?wc-api=wc_gw_arsenalpay&arsenalpay=callback`
  - Вы можете включать/выключать протоколирование для управления сохранением логов для отладки.
  - Вы можете задать ip-адрес, только с которого будут разрешены обратные запросы о совершаемых платежах, в поле **Разрешенный IP-адрес**.

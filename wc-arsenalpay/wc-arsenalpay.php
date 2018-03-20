@@ -151,19 +151,19 @@ function wc_arsenalpay_init() {
 				),
 
 				'arsenalpay_widget_id'    => array(
-					'title'       => __('Widget ID', 'wc-arsenalpay'),
+					'title'       => __('widget', 'wc-arsenalpay'),
 					'type'        => 'text',
 					'description' => __('Assigned to merchant for the access to ArsenalPay payment widget. Required.', 'wc-arsenalpay'),
 					'desc_tip'    => true,
 				),
 				'arsenalpay_widget_key'   => array(
-					'title'       => __('Widget key', 'wc-arsenalpay'),
+					'title'       => __('widgetKey', 'wc-arsenalpay'),
 					'type'        => 'text',
 					'description' => __('Assigned to merchant for the access to ArsenalPay payment widget. Required.', 'wc-arsenalpay'),
 					'desc_tip'    => true,
 				),
 				'arsenalpay_callback_key' => array(
-					'title'       => __('Callback key', 'wc-arsenalpay'),
+					'title'       => __('callbackKey', 'wc-arsenalpay'),
 					'type'        => 'text',
 					'description' => __('With this key you check a validity of sign that comes with callback payment data. Required.', 'wc-arsenalpay'),
 					'desc_tip'    => true,
