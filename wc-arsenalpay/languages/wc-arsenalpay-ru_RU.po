@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-03-07 09:08+1000\n"
-"PO-Revision-Date: 2018-03-07 09:08+1000\n"
+"POT-Creation-Date: 2018-03-20 12:47+1000\n"
+"PO-Revision-Date: 2018-03-20 12:47+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -66,7 +66,7 @@ msgid "Log ArsenalPay events, such as callback requests"
 msgstr "Записывать логи событий, такие как обратные запросы"
 
 #: wc-arsenalpay.php:154
-msgid "Widget ID"
+msgid "widget"
 msgstr ""
 
 #: wc-arsenalpay.php:156 wc-arsenalpay.php:162
@@ -76,11 +76,11 @@ msgstr ""
 "Присваивается предприятию для доступа к платежному виджету. Обязательный."
 
 #: wc-arsenalpay.php:160
-msgid "Widget key"
+msgid "widgetKey"
 msgstr ""
 
 #: wc-arsenalpay.php:166
-msgid "Callback key"
+msgid "callbackKey"
 msgstr ""
 
 #: wc-arsenalpay.php:168
@@ -113,7 +113,7 @@ msgid ""
 "different rate."
 msgstr ""
 "Налоговая ставка по умолчанию будет в чеке, если в карточке товара не "
-"указана другая ставка. "
+"указана другая ставка."
 
 #: wc-arsenalpay.php:190
 msgid ""

@@ -74,7 +74,7 @@ pay@arsenalpay.ru
 3. Make following settings:
  - Check the box next to **Enable ArsenalPay**.
  - You can edit **Title** and **Description** of ArsenalPay payment method as you would like to display it at your site.
- - Fill out **Callback key**, **Widget id** , **Widget key** fields with your received callback key, widget id and widget key.
+ - Fill out **callbackKey**, **widget** , **widgetKey** fields with your received callbackKey, widget and widgetKey.
  - Your online shop will be receiving callback requests about processed payments for automatically order status change. The callbacks will being received onto the address assigned in **Callback URL** string upside of the payment plugin settings. Callback is set to address: `http(s)://yourSiteAddress/?wc-api=wc_gw_arsenalpay&arsenalpay=callback`
  - You can enable/disable logging by checking/unchecking the box.
  - You can specify IP address only from which it will be allowed to receive callback requests about payments from ArsenalPay onto your site in **Allowed IP address** field.
