@@ -4,7 +4,7 @@
 Plugin Name: ArsenalPay
 Plugin URI: https://github.com/ArsenalPay/WooCommerce-ArsenalPay-CMS
 Description: Extends WooCommerce with ArsenalPay gateway.
-Version: 1.1.1
+Version: 1.2.0
 Author: Arsenal Media Dev.
 Author URI: https://arsenalpay.ru
 License: GNU General Public License v3.0
@@ -64,13 +64,14 @@ function wc_arsenalpay_init() {
 			if ($this->debug) {
 				$this->loger = new WC_Logger();
 			}
-			// Add display hook of receipt and save hook for settings:
+                        
+                        // Add display hook of receipt and save hook for settings:
 			add_action('woocommerce_receipt_arsenalpay', array($this, 'receipt_page'));
 			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(
 				$this,
 				'process_admin_options'
 			));
-
+                        
 			// ArsenalPay callback hook:
 			add_action('woocommerce_api_wc_gw_arsenalpay', array($this, 'callback_listener'));
 
@@ -147,23 +148,23 @@ function wc_arsenalpay_init() {
 					'type'        => 'checkbox',
 					'label'       => __('Enable logging', 'woocommerce'),
 					'default'     => 'no',
-					'description' => sprintf(__('Log ArsenalPay events, such as callback requests', 'wc-arsenalpay'), wc_get_log_file_path('arsenalpay'))
+					'description' => __('Log ArsenalPay events, such as callback requests', 'wc-arsenalpay')
 				),
 
 				'arsenalpay_widget_id'    => array(
-					'title'       => __('widget', 'wc-arsenalpay'),
+					'title'       => __('Widget ID', 'wc-arsenalpay'),
 					'type'        => 'text',
 					'description' => __('Assigned to merchant for the access to ArsenalPay payment widget. Required.', 'wc-arsenalpay'),
 					'desc_tip'    => true,
 				),
 				'arsenalpay_widget_key'   => array(
-					'title'       => __('widgetKey', 'wc-arsenalpay'),
+					'title'       => __('Widget key', 'wc-arsenalpay'),
 					'type'        => 'text',
 					'description' => __('Assigned to merchant for the access to ArsenalPay payment widget. Required.', 'wc-arsenalpay'),
 					'desc_tip'    => true,
 				),
 				'arsenalpay_callback_key' => array(
-					'title'       => __('callbackKey', 'wc-arsenalpay'),
+					'title'       => __('Callback key', 'wc-arsenalpay'),
 					'type'        => 'text',
 					'description' => __('With this key you check a validity of sign that comes with callback payment data. Required.', 'wc-arsenalpay'),
 					'desc_tip'    => true,
@@ -182,7 +183,6 @@ function wc_arsenalpay_init() {
 					'desc_tip'    => false,
 				),
 			);
-
 
 			$WC_taxes = $this->_get_all_wc_taxes();
 			if (count($WC_taxes) > 0) {
@@ -273,13 +273,14 @@ function wc_arsenalpay_init() {
 			$callback_params = stripslashes_deep($_POST);
 
 			$REMOTE_ADDR = $_SERVER["REMOTE_ADDR"];
-			$this->log('Remote IP: ' . $REMOTE_ADDR . ' with POST params: ' . json_encode($callback_params));
+			//$this->log('Remote IP: ' . $REMOTE_ADDR . ' with POST params: ' . json_encode($callback_params));
 
 			$IP_ALLOW = trim($this->arsenalpay_ip);
 			if (strlen($IP_ALLOW) > 0 && $IP_ALLOW != $REMOTE_ADDR) {
 				$this->log('IP ' . $REMOTE_ADDR . ' is not allowed.');
 				$this->exitf('ERR');
 			}
+                        
 
 			if (!$this->check_params($callback_params)) {
 				$this->exitf('ERR');
@@ -641,9 +642,25 @@ function wc_arsenalpay_init() {
 	 **/
 	function add_wc_arsenalpay($methods) {
 		$methods[] = 'WC_GW_ArsenalPay';
-
 		return $methods;
 	}
 
 	add_filter('woocommerce_payment_gateways', 'add_wc_arsenalpay');
+        
+        /**
+        * Support Cart and Checkout blocks from WooCommerce Blocks.
+        */
+        function woocommerce_arsenalpay_blocks_support() {
+                if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+                        require_once dirname( __FILE__ ) . '/includes/class-wc-gateway-arsenalpay-blocks-support.php';
+                        add_action(
+                                'woocommerce_blocks_payment_method_type_registration',
+                                function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+                                        $payment_method_registry->register( new WC_Gateway_Arsenalpay_Blocks_Support() );
+                                }
+                        );
+                }
+       }
+       
+       add_action( 'before_woocommerce_init', 'woocommerce_arsenalpay_blocks_support');
 }
